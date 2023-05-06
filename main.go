@@ -2,7 +2,6 @@ package main
 
 import (
 	"JD_backend/V0"
-	_ "JD_backend/docs"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	gs "github.com/swaggo/gin-swagger"
