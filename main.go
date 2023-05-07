@@ -13,6 +13,7 @@ var BasicRouter *gin.Engine
 func init() {
 	BasicRouter = gin.Default()
 	V0.Register(BasicRouter)
+	// test push
 }
 func main() {
 	BasicRouter.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
