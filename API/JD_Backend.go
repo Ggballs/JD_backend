@@ -1,32 +1,20 @@
-package mAPI
+package API
 
 import (
 	"github.com/gin-gonic/gin"
 )
 
-// PolishJob
-// @Tags 工作管理
-// @Summary 擦亮工作
-// @Description 对某一工作进行高亮标注
-// @Param I'd query string true "希望高亮的JobId"
-// @Router /api/PolishJob [GET]
-// @Produce json
-// @Success 200 {object} string
-// @Failure 400 {object} string
-func PolishJob(ctx *gin.Context) {
-
-}
-
 // BatchPolishJobs
 // @Tags 工作管理
 // @Summary 批量擦亮工作
 // @Description 对多个工作进行高亮标注
-// @Param Ids query []string true "希望高亮的JobId组"
+// @Param Ids body []string true "希望高亮的JobId组"
 // @Router /api/BatchPolishJobs [GET]
 // @Produce json
 // @Success 200 {object} string
-// @Failure 400 {object} string
+// @Failure 400 {object} def.ResponseForm
 func BatchPolishJobs(ctx *gin.Context) {
+
 }
 
 // CollectJob
@@ -35,7 +23,7 @@ func BatchPolishJobs(ctx *gin.Context) {
 // @Description 对某一工作进入收藏夹
 // @Param JobId query string true "将要收藏的工作对应的JobId"
 // @Param UserId query string true "UserId对应用户的收藏夹"
-// @Router /api/CollectJob [GET]
+// @Router /api/CollectJob [POST]
 // @Produce json
 // @Success 200 {object} string
 // @Failure 400 {object} string
@@ -43,16 +31,20 @@ func CollectJob(ctx *gin.Context) {
 
 }
 
-// BatchPullOff
+func DeCollectJob(ctx *gin.Context) {
+
+}
+
+// BatchPullOffJobs
 // @Tags 工作管理
 // @Summary 批量下架工作
 // @Description 将选中的工作进行下架
 // @Param JobIds query []string true "将要下架的JobId组"
-// @Router /api/BatchPullOff [GET]
+// @Router /api/BatchPullOffJobs [GET]
 // @Produce json
 // @Success 200 {object} string
 // @Failure 400 {object} string
-func BatchPullOff(ctx *gin.Context) {
+func BatchPullOffJobs(ctx *gin.Context) {
 
 }
 
