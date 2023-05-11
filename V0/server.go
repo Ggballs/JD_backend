@@ -6,6 +6,7 @@ import (
 )
 
 func Register(BasicRouter *gin.Engine) {
+	BasicRouter.GET("login", API.Login)
 	apiGroup := BasicRouter.Group("api")
 	jobsGroup := apiGroup.Group("jobs")
 	jobsGroup.POST("/polish", API.BatchPolishJobs)

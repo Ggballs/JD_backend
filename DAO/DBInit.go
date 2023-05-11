@@ -1,6 +1,7 @@
 package DAO
 
 import (
+	"JD_backend/DAO/mdDef"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
@@ -20,5 +21,10 @@ func DBinit() {
 	}), &gorm.Config{})
 	if err != nil {
 		log.Println("initialize gorm DB error : " + err.Error())
+	} else {
+		err := MysqlDB.AutoMigrate(&mdDef.UserBasic{})
+		if err != nil {
+			log.Println("Database init  error " + err.Error())
+		}
 	}
 }
