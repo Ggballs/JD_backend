@@ -1,6 +1,7 @@
 package main
 
 import (
+	"JD_backend/DAO"
 	"JD_backend/V0"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -10,6 +11,7 @@ import (
 var BasicRouter *gin.Engine
 
 func init() {
+	DAO.DBinit()
 	BasicRouter = gin.Default()
 	V0.Register(BasicRouter)
 }

@@ -14,7 +14,7 @@ var privateKey, _ = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 var publicKey = &privateKey.PublicKey
 var hs = jwt.NewES256(jwt.ECDSAPublicKey(publicKey), jwt.ECDSAPrivateKey(privateKey))
 
-func Sign(id uint, username string) (string, error) {
+func Sign(id string, username string) (string, error) {
 	now := time.Now()
 	pl := msDef.LoginToken{
 		Payload: jwt.Payload{

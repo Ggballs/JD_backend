@@ -4,7 +4,7 @@ import "github.com/gbrlsnchs/jwt/v3"
 
 type LoginToken struct {
 	jwt.Payload
-	ID       uint   `json:"id"`
+	ID       string `json:"id"`
 	UserName string `json:"userName"`
 }
 

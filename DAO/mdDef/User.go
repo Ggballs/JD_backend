@@ -9,8 +9,13 @@ import (
 
 type UserBasic struct {
 	gorm.Model
-	Name     string `json:"name" gorm:"not null; index; column:name"`
+	UserId   string `json:"id" gorm:"not null; index; column:user_id"`
+	Name     string `json:"name" gorm:"column:name"`
 	PassWord string `json:"password" gorm:"column:password"`
+}
+
+func (UserBasic) TableName() string {
+	return "user_basics"
 }
 
 func (u *UserBasic) Compare(password string) error {

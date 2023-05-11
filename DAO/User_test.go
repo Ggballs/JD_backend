@@ -11,6 +11,7 @@ func TestCreateUser(t *testing.T) {
 
 	users := []mdDef.UserBasic{
 		{
+			UserId:   "1",
 			Name:     "aliyah",
 			PassWord: "423319",
 		},

@@ -3,8 +3,11 @@ package API
 import (
 	"JD_backend/API/def"
 	"JD_backend/DAO"
+	"JD_backend/DAO/mdDef"
 	"JD_backend/Service"
+	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 )
@@ -124,10 +127,25 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	token, err := Service.Sign(user.ID, user.Name)
+	token, err := Service.Sign(user.UserId, user.Name)
 
 	if err != nil {
 		log.Println("get token error " + err.Error())
+	}
+
+	userId2Token := &mdDef.TokenBasic{}
+	result := DAO.MysqlDB.Where("id = ?", user.UserId).First(userId2Token)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		// 数据不存在，插入数据
+		newToken := mdDef.TokenBasic{
+			UserId: user.UserId,
+			Token:  token,
+		}
+		DAO.MysqlDB.Create(&newToken)
+
+	} else {
+		userId2Token.Token = token
+		DAO.MysqlDB.Save(&userId2Token)
 	}
 
 	ctx.JSON(http.StatusOK, def.ResponseForm{Code: "200", Msg: "login success", Data: token})
