@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // BatchPolishJobs
@@ -19,7 +20,38 @@ import (
 // @Success 200 {object} string
 // @Failure 400 {object} def.ResponseForm
 func BatchPolishJobs(ctx *gin.Context) {
+	req := new(def.BatchPolishJobsRequest)
+	if err := ctx.ShouldBind(req); err != nil {
+		log.Println("BatchPolishJobs Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
 
+	header := ctx.GetHeader("Authorization")
+	userInfo, err := Service.GetUserInfoByHeader(header)
+	if err != nil {
+		log.Println("BatchPolishJobs Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
+	if err := Service.BatchPolishJobs(userInfo.UserId, req.JobIds); err != nil {
+		log.Println("BatchPolishJobs Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, def.ResponseForm{
+		Code: strconv.Itoa(http.StatusOK),
+		Msg:  "success",
+	})
 }
 
 // CollectJob
@@ -34,11 +66,75 @@ func BatchPolishJobs(ctx *gin.Context) {
 // @Success 200 {object} string
 // @Failure 400 {object} string
 func CollectJob(ctx *gin.Context) {
+	req := new(def.CollectJobRequest)
+	if err := ctx.ShouldBind(req); err != nil {
+		log.Println("CollectJob Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
 
+	header := ctx.GetHeader("Authorization")
+	userInfo, err := Service.GetUserInfoByHeader(header)
+	if err != nil {
+		log.Println("CollectJob Error in API layer :" + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	if err := Service.CollectJob(userInfo.UserId, req.JobId); err != nil {
+		log.Println("CollectJob Error in API layer :" + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, def.ResponseForm{
+		Code: strconv.Itoa(http.StatusOK),
+		Msg:  "success",
+	})
 }
 
 func DeCollectJob(ctx *gin.Context) {
+	req := new(def.CollectJobRequest)
+	if err := ctx.ShouldBind(req); err != nil {
+		log.Println("DeCollectJob Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
+	header := ctx.GetHeader("Authorization")
+	userInfo, err := Service.GetUserInfoByHeader(header)
+	if err != nil {
+		log.Println("DeCollectJob Error in API layer :" + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
 
+	if err := Service.DeCollectJob(userInfo.UserId, req.JobId); err != nil {
+		log.Println("DeCollectJob Error in API layer :" + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, def.ResponseForm{
+		Code: strconv.Itoa(http.StatusOK),
+		Msg:  "success",
+	})
 }
 
 // BatchPullOffJobs
@@ -52,7 +148,39 @@ func DeCollectJob(ctx *gin.Context) {
 // @Success 200 {object} string
 // @Failure 400 {object} string
 func BatchPullOffJobs(ctx *gin.Context) {
+	req := new(def.BatchPullOffJobsRequest)
+	if err := ctx.ShouldBind(req); err != nil {
+		log.Println("BatchPullOffJobs Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
 
+	header := ctx.GetHeader("Authorization")
+	userInfo, err := Service.GetUserInfoByHeader(header)
+	if err != nil {
+		log.Println("BatchPullOffJobs Error in API layer :" + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	if err := Service.BatchPullOffJobs(userInfo.UserId, req.JobIds); err != nil {
+		log.Println("BatchPullOffJobs Error in API layer :" + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: strconv.Itoa(http.StatusBadRequest),
+			Msg:  err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, def.ResponseForm{
+		Code: strconv.Itoa(http.StatusOK),
+		Msg:  "success",
+	})
 }
 
 // ListUploadedJobs
