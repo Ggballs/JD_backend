@@ -1,6 +1,6 @@
 package def
 
-type UserReq struct {
+type UserRequest struct {
 	Name     string `json:"name"`
 	PassWord string `json:"password"`
 }

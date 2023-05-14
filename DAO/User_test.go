@@ -2,18 +2,42 @@ package DAO
 
 import (
 	"JD_backend/DAO/mdDef"
+	"encoding/json"
 	"log"
 	"testing"
 )
 
 func TestCreateUser(t *testing.T) {
 	DBinit()
-
+	viewedJobs := []mdDef.ViewedJob{
+		{
+			"1",
+			"1",
+		},
+		{
+			"2",
+			"2",
+		},
+	}
+	collectedJobs := []mdDef.CollectedJob{
+		{
+			"1",
+			"1",
+		},
+		{
+			"2",
+			"2",
+		},
+	}
+	jsonViewedJobs, err := json.Marshal(viewedJobs)
+	jsonCollectedJobs, err := json.Marshal(collectedJobs)
 	users := []mdDef.UserBasic{
 		{
-			UserId:   "1",
-			Name:     "aliyah",
-			PassWord: "423319",
+			UserId:        "1",
+			Name:          "aliyah",
+			PassWord:      "423319",
+			ViewedJobs:    jsonViewedJobs,
+			CollectedJobs: jsonCollectedJobs,
 		},
 	}
 
@@ -30,7 +54,7 @@ func TestCreateUser(t *testing.T) {
 			return
 		}
 	}
-	err := MysqlDB.Create(&users).Error
+	err = MysqlDB.Create(&users).Error
 	if err != nil {
 		log.Println("add to database error " + err.Error())
 		return

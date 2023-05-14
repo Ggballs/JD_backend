@@ -2,12 +2,8 @@ package API
 
 import (
 	"JD_backend/API/def"
-	"JD_backend/DAO"
-	"JD_backend/DAO/mdDef"
 	"JD_backend/Service"
-	"errors"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"log"
 	"net/http"
 )
@@ -98,6 +94,17 @@ func ListCollectedJobs(ctx *gin.Context) {
 // @Success 200 {object} ResponseForm
 // @Failure 400 {object} string
 func ListViewedJobs(ctx *gin.Context) {
+	var r def.ListViewedJobsRequest
+	if err := ctx.ShouldBindJSON(&r); err != nil {
+		log.Println("list viewed job info error msg is " + err.Error())
+		return
+	}
+	jobIds, err := Service.ListViewedJobs(r.UserId)
+	if err != nil {
+		log.Println("login viewed job info error msg is " + err.Error())
+		return
+	}
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: "200", Msg: "login success", Data: jobIds})
 
 }
 
@@ -112,41 +119,15 @@ func ListViewedJobs(ctx *gin.Context) {
 // @Success 200 {object} ResponseForm
 // @Failure 400 {object} string
 func Login(ctx *gin.Context) {
-	var u def.UserReq
-	if err := ctx.ShouldBindJSON(&u); err != nil {
+	var r def.UserRequest
+	if err := ctx.ShouldBindJSON(&r); err != nil {
 		log.Println("login info error msg is " + err.Error())
 		return
 	}
-	user, err := DAO.GetUserByName(u.Name)
+	token, err := Service.Login(r.Name, r.PassWord)
 	if err != nil {
-		log.Println("dont get user from username " + err.Error())
+		log.Println("login info err msg is " + err.Error())
 		return
 	}
-	if err := user.Compare(u.PassWord); err != nil {
-		log.Println("password error " + err.Error())
-		return
-	}
-
-	token, err := Service.Sign(user.UserId, user.Name)
-
-	if err != nil {
-		log.Println("get token error " + err.Error())
-	}
-
-	userId2Token := &mdDef.TokenBasic{}
-	result := DAO.MysqlDB.Where("id = ?", user.UserId).First(userId2Token)
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		// 数据不存在，插入数据
-		newToken := mdDef.TokenBasic{
-			UserId: user.UserId,
-			Token:  token,
-		}
-		DAO.MysqlDB.Create(&newToken)
-
-	} else {
-		userId2Token.Token = token
-		DAO.MysqlDB.Save(&userId2Token)
-	}
-
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: "200", Msg: "login success", Data: token})
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: "200", Msg: "login success", Data: token.(string)})
 }

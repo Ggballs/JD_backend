@@ -12,9 +12,9 @@ func Register(BasicRouter *gin.Engine) {
 	jobsGroup.POST("/polish", API.BatchPolishJobs)
 	jobsGroup.POST("/collect", API.CollectJob)
 	jobsGroup.POST("/pull-off", API.BatchPullOffJobs)
-	apiGroup.DELETE("/de-collect", API.DeCollectJob)
-	apiGroup.GET("/ListViewedJobs", API.ListViewedJobs)
-	apiGroup.GET("/ListUploadedJobs", API.ListUploadedJobs)
-	apiGroup.GET("/ListCollectedJobs", API.ListCollectedJobs)
+	jobsGroup.DELETE("/de-collect", API.DeCollectJob)
+	jobsGroup.GET("/ListViewedJobs", API.ListViewedJobs)
+	jobsGroup.GET("/ListUploadedJobs", API.ListUploadedJobs)
+	jobsGroup.GET("/ListCollectedJobs", API.ListCollectedJobs)
 
 }

@@ -2,6 +2,7 @@ package DAO
 
 import (
 	"JD_backend/DAO/mdDef"
+	"encoding/json"
 	"errors"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/utils"
@@ -193,6 +194,46 @@ func ListUploadedJobIds(userId string) ([]string, error) {
 	}
 	var jobIds []string
 	for _, job := range jobs {
+		jobIds = append(jobIds, job.JobId)
+	}
+	return jobIds, nil
+}
+
+func ListViewedJobIds(userId string) ([]string, error) {
+	var user *mdDef.UserBasic
+	err := MysqlDB.Where("user_id = ?", userId).Find(&user).Error
+	if err != nil {
+		log.Println("ListViewEdJObs error in DAO layer: " + err.Error())
+		return nil, err
+	}
+	var jobIds []string
+	var viewJobIds []*mdDef.ViewedJob
+	err = json.Unmarshal(user.ViewedJobs, &viewJobIds)
+	if err != nil {
+		log.Println("json unmarshal error: " + err.Error())
+		return nil, err
+	}
+	for _, job := range viewJobIds {
+		jobIds = append(jobIds, job.JobId)
+	}
+	return jobIds, nil
+}
+
+func ListCollectedJobIds(userId string) ([]string, error) {
+	var user *mdDef.UserBasic
+	err := MysqlDB.Where("user_id = ?", userId).Find(&user).Error
+	if err != nil {
+		log.Println("ListCollectedJObs error in DAO layer: " + err.Error())
+		return nil, err
+	}
+	var jobIds []string
+	var collectedJobs []*mdDef.ViewedJob
+	err = json.Unmarshal(user.CollectedJobs, &collectedJobs)
+	if err != nil {
+		log.Println("json unmarshal error: " + err.Error())
+		return nil, err
+	}
+	for _, job := range collectedJobs {
 		jobIds = append(jobIds, job.JobId)
 	}
 	return jobIds, nil

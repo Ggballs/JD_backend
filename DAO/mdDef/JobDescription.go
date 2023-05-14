@@ -19,7 +19,7 @@ type JobDescription struct {
 	CompanyName        string
 	//具体地点和base的区别？
 	UploadUserId   string `json:"upload_user_id"`
-	isShow         bool   `json:"is_show" gorm:"column:is_show"`
+	IsShow         bool   `json:"is_show" gorm:"column:is_show"`
 	PolishedTime   time.Time
 	CollectedTimes int
 }

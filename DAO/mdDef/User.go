@@ -7,11 +7,22 @@ import (
 	"log"
 )
 
+type ViewedJob struct {
+	JobId      string `json:"job_id"`
+	ViewedTime string `json:"viewed_time"`
+}
+
+type CollectedJob struct {
+	JobId         string `json:"job_id"`
+	CollectedTime string `json:"collected_time"`
+}
 type UserBasic struct {
 	gorm.Model
-	UserId   string `json:"id" gorm:"not null; index; column:user_id"`
-	Name     string `json:"name" gorm:"column:name"`
-	PassWord string `json:"password" gorm:"column:password"`
+	UserId        string `json:"id" gorm:"not null; index; column:user_id"`
+	Name          string `json:"name" gorm:"column:name"`
+	PassWord      string `json:"password" gorm:"column:password"`
+	ViewedJobs    []byte `gorm:"type:json"`
+	CollectedJobs []byte `gorm:"type:json"`
 }
 
 func (UserBasic) TableName() string {

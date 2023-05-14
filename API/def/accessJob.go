@@ -10,7 +10,11 @@ type BatchPolishJobsRequest struct {
 	JobIds []string
 }
 
-type BatchPullOffJobs struct {
+type BatchPullOffJobsRequest struct {
 	UserId string
 	JobIds []string
+}
+
+type ListViewedJobsRequest struct {
+	UserId string `json:"user_id"`
 }

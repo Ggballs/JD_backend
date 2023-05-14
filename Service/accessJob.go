@@ -40,3 +40,30 @@ func BatchPullOffJobs(userId string, jobIds []string) error {
 	}
 	return nil
 }
+
+func ListViewedJobs(userId string) ([]string, error) {
+	JobIds, err := DAO.ListViewedJobIds(userId)
+	if err != nil {
+		log.Println("ListViewJobs error : " + err.Error())
+		return nil, err
+	}
+	return JobIds, nil
+}
+
+func ListUploadedJobs(userId string) ([]string, error) {
+	jobIds, err := DAO.ListUploadedJobIds(userId)
+	if err != nil {
+		log.Println("ListUploadedJobs error ：" + err.Error())
+		return nil, err
+	}
+	return jobIds, nil
+}
+
+func ListCollectedJobs(userId string) ([]string, error) {
+	jobIds, err := DAO.ListCollectedJobIds(userId)
+	if err != nil {
+		log.Println("ListUploadedJobs error ：" + err.Error())
+		return nil, err
+	}
+	return jobIds, nil
+}
