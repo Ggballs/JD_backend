@@ -22,7 +22,7 @@ func DBinit() {
 	if err != nil {
 		log.Println("initialize gorm DB error : " + err.Error())
 	} else {
-		err := MysqlDB.AutoMigrate(&mdDef.UserBasic{}, &mdDef.TokenBasic{})
+		err := MysqlDB.AutoMigrate(&mdDef.UserBasic{}, &mdDef.TokenBasic{}, &mdDef.JobDescription{}, &mdDef.Collection{})
 		if err != nil {
 			log.Println("Database init  error " + err.Error())
 		}

@@ -28,13 +28,13 @@ func CollectJob(userId, jobId string) error {
 		return r.Error
 	}
 
-	r = tx.Where("job_id", jobId).Find(&mdDef.JobDescription{})
+	r = tx.Where("job_id", jobId).First(&mdDef.JobDescription{})
 	if r.Error != nil {
 		log.Println("DB transaction finding error : " + r.Error.Error())
 		return r.Error
 	}
 
-	r = tx.Model(&mdDef.JobDescription{}).Where("job_id", jobId).Update("collected_time", JobDetail.CollectedTimes+1)
+	r = tx.Model(&mdDef.JobDescription{}).Where("job_id", jobId).Update("collected_times", JobDetail.CollectedTimes+1)
 	if r.Error != nil {
 		log.Println("DB transaction update error : " + r.Error.Error())
 		return r.Error
@@ -64,12 +64,20 @@ func CollectJob(userId, jobId string) error {
 }
 
 func DeCollectJob(userId, jobId string) error {
+	var collectionDetail mdDef.Collection
+	err := MysqlDB.Where("user_id = ? AND job_id = ?", userId, jobId).First(&collectionDetail).Error
+	if err != nil {
+		log.Println("DeCollectJob error in Finding collectionDetail in DAO Layer: " + err.Error())
+		return err
+	}
+
 	tx := MysqlDB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
 		}
 	}()
+
 	if err := tx.Error; err != nil {
 		return err
 	}
@@ -81,13 +89,13 @@ func DeCollectJob(userId, jobId string) error {
 		return r.Error
 	}
 
-	r = tx.Where("job_id", jobId).Find(&mdDef.JobDescription{})
+	r = tx.Where("job_id", jobId).First(&mdDef.JobDescription{})
 	if r.Error != nil {
 		log.Println("DeCollectJob : DB transaction finding error : " + r.Error.Error())
 		return r.Error
 	}
 
-	r = tx.Model(&mdDef.JobDescription{}).Where("job_id", jobId).Update("collected_time", JobDetail.CollectedTimes-1)
+	r = tx.Model(&mdDef.JobDescription{}).Where("job_id", jobId).Update("collected_times", JobDetail.CollectedTimes-1)
 	if r.Error != nil {
 		log.Println("DeCollectJob : DB transaction update error : " + r.Error.Error())
 		return r.Error
@@ -96,16 +104,6 @@ func DeCollectJob(userId, jobId string) error {
 	if err := tx.Commit().Error; err != nil {
 		log.Println("DeCollectJob : mysql transaction error : " + err.Error())
 		return err
-	}
-
-	var collectionDetail mdDef.Collection
-	err := MysqlDB.Where("user_id = ? AND job_id = ?", userId, jobId).Find(&collectionDetail).Error
-	if err != nil {
-		log.Println("DeCollectJob error in Finding collectionDetail in DAO Layer: " + err.Error())
-		return err
-	}
-	if collectionDetail.JobId != jobId {
-		log.Println("DeCollectJob error in DAO Layer: " + "userId " + userId + " has no collection history on jobId " + jobId)
 	}
 
 	err = MysqlDB.Where("user_id = ? AND job_id = ?", userId, jobId).Delete(&mdDef.Collection{}).Error

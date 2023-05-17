@@ -10,16 +10,16 @@ type JobDescription struct {
 	gorm.Model
 	JobId              string `json:"job_id" gorm:"not null; index"`
 	InternTimeInMonths int    `json:"intern_time_in_months"`
-	WorkDay            int
-	BasePosition       string
-	Degree             string
-	JobType            string
-	Industry           string
-	JobName            string
-	CompanyName        string
+	WorkDay            int    `json:"work_day"`
+	BasePosition       string `json:"base_position"`
+	Degree             string `json:"degree"`
+	JobType            string `json:"job_type"`
+	Industry           string `json:"industry"`
+	JobName            string `json:"job_name"`
+	CompanyName        string `json:"company_name"`
 	//具体地点和base的区别？
-	UploadUserId   string `json:"upload_user_id"`
-	IsShow         bool   `json:"is_show" gorm:"column:is_show"`
-	PolishedTime   time.Time
-	CollectedTimes int
+	UploadUserId   string    `json:"upload_user_id"`
+	IsShow         bool      `json:"is_show" gorm:"column:is_show"`
+	PolishedTime   time.Time `json:"polished_time"`
+	CollectedTimes int       `json:"collected_times"`
 }
