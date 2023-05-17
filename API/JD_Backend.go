@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"strconv"
 )
 
 // BatchPolishJobs
@@ -25,7 +24,7 @@ func BatchPolishJobs(ctx *gin.Context) {
 	if err := ctx.ShouldBind(req); err != nil {
 		log.Println("BatchPolishJobs Error in API layer : " + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
@@ -36,7 +35,7 @@ func BatchPolishJobs(ctx *gin.Context) {
 	if err != nil {
 		log.Println("BatchPolishJobs Error in API layer : " + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
@@ -44,13 +43,13 @@ func BatchPolishJobs(ctx *gin.Context) {
 	if err := Service.BatchPolishJobs(userInfo.UserId, req.JobIds); err != nil {
 		log.Println("BatchPolishJobs Error in API layer : " + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, def.ResponseForm{
-		Code: strconv.Itoa(http.StatusOK),
+		Code: http.StatusOK,
 		Msg:  "success",
 	})
 }
@@ -70,7 +69,7 @@ func CollectJob(ctx *gin.Context) {
 	if err := ctx.ShouldBind(req); err != nil {
 		log.Println("CollectJob Error in API layer : " + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
@@ -81,7 +80,7 @@ func CollectJob(ctx *gin.Context) {
 	if err != nil {
 		log.Println("CollectJob Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
@@ -90,14 +89,14 @@ func CollectJob(ctx *gin.Context) {
 	if err := Service.CollectJob(userInfo.UserId, req.JobId); err != nil {
 		log.Println("CollectJob Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, def.ResponseForm{
-		Code: strconv.Itoa(http.StatusOK),
+		Code: http.StatusOK,
 		Msg:  "success",
 	})
 }
@@ -117,7 +116,7 @@ func DeCollectJob(ctx *gin.Context) {
 	if err := ctx.ShouldBind(req); err != nil {
 		log.Println("DeCollectJob Error in API layer : " + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
@@ -127,7 +126,7 @@ func DeCollectJob(ctx *gin.Context) {
 	if err != nil {
 		log.Println("DeCollectJob Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
@@ -136,13 +135,13 @@ func DeCollectJob(ctx *gin.Context) {
 	if err := Service.DeCollectJob(userInfo.UserId, req.JobId); err != nil {
 		log.Println("DeCollectJob Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, def.ResponseForm{
-		Code: strconv.Itoa(http.StatusOK),
+		Code: http.StatusOK,
 		Msg:  "success",
 	})
 }
@@ -162,7 +161,7 @@ func BatchPullOffJobs(ctx *gin.Context) {
 	if err := ctx.ShouldBind(req); err != nil {
 		log.Println("BatchPullOffJobs Error in API layer : " + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
@@ -173,7 +172,7 @@ func BatchPullOffJobs(ctx *gin.Context) {
 	if err != nil {
 		log.Println("BatchPullOffJobs Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
@@ -182,13 +181,13 @@ func BatchPullOffJobs(ctx *gin.Context) {
 	if err := Service.BatchPullOffJobs(userInfo.UserId, req.JobIds); err != nil {
 		log.Println("BatchPullOffJobs Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: strconv.Itoa(http.StatusBadRequest),
+			Code: http.StatusBadRequest,
 			Msg:  err.Error(),
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, def.ResponseForm{
-		Code: strconv.Itoa(http.StatusOK),
+		Code: http.StatusOK,
 		Msg:  "success",
 	})
 }
@@ -242,7 +241,7 @@ func ListViewedJobs(ctx *gin.Context) {
 		log.Println("login viewed job info error msg is " + err.Error())
 		return
 	}
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: "200", Msg: "login success", Data: jobIds})
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "login success", Data: jobIds})
 
 }
 
@@ -267,5 +266,5 @@ func Login(ctx *gin.Context) {
 		log.Println("login info err msg is " + err.Error())
 		return
 	}
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: "200", Msg: "login success", Data: token.(string)})
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "login success", Data: token.(string)})
 }
