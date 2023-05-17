@@ -13,11 +13,12 @@ import (
 // @Tags 工作管理
 // @Summary 批量擦亮工作
 // @Description 对多个工作进行高亮标注
+// @Accept application/json
 // @Param Authorization header string true "Bearer 用户令牌"
-// @Param Ids body []string true "希望高亮的JobId组"
-// @Router /api/BatchPolishJobs [GET]
+// @Param request body def.BatchPolishJobsRequest true "请求"
+// @Router /api/jobs/polish [POST]
 // @Produce json
-// @Success 200 {object} string
+// @Success 200 {object} def.ResponseForm
 // @Failure 400 {object} def.ResponseForm
 func BatchPolishJobs(ctx *gin.Context) {
 	req := new(def.BatchPolishJobsRequest)
@@ -59,12 +60,11 @@ func BatchPolishJobs(ctx *gin.Context) {
 // @Summary 收藏工作
 // @Description 对某一工作进入收藏夹
 // @Param Authorization header string true "Bearer 用户令牌"
-// @Param JobId query string true "将要收藏的工作对应的JobId"
-// @Param UserId query string true "UserId对应用户的收藏夹"
-// @Router /api/CollectJob [POST]
+// @Param request body def.CollectJobRequest true "请求"
+// @Router /api/jobs/collect [POST]
 // @Produce json
-// @Success 200 {object} string
-// @Failure 400 {object} string
+// @Success 200 {object} def.ResponseForm
+// @Failure 400 {object} def.ResponseForm
 func CollectJob(ctx *gin.Context) {
 	req := new(def.CollectJobRequest)
 	if err := ctx.ShouldBind(req); err != nil {
@@ -102,6 +102,16 @@ func CollectJob(ctx *gin.Context) {
 	})
 }
 
+// DeCollectJob
+// @Tags 工作管理
+// @Summary 取消收藏工作
+// @Description 对某一工作取消收藏
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param request body def.CollectJobRequest true "请求"
+// @Router /api/jobs/de-collect [POST]
+// @Produce json
+// @Success 200 {object} def.ResponseForm
+// @Failure 400 {object} def.ResponseForm
 func DeCollectJob(ctx *gin.Context) {
 	req := new(def.CollectJobRequest)
 	if err := ctx.ShouldBind(req); err != nil {
@@ -142,11 +152,11 @@ func DeCollectJob(ctx *gin.Context) {
 // @Summary 批量下架工作
 // @Description 将选中的工作进行下架
 // @Param Authorization header string true "Bearer 用户令牌"
-// @Param JobIds query []string true "将要下架的JobId组"
-// @Router /api/BatchPullOffJobs [GET]
+// @Param request body def.BatchPullOffJobsRequest true "请求"
+// @Router /api/jobs/pull-off [POST]
 // @Produce json
-// @Success 200 {object} string
-// @Failure 400 {object} string
+// @Success 200 {object} def.ResponseForm
+// @Failure 400 {object} def.ResponseForm
 func BatchPullOffJobs(ctx *gin.Context) {
 	req := new(def.BatchPullOffJobsRequest)
 	if err := ctx.ShouldBind(req); err != nil {
@@ -205,8 +215,8 @@ func ListUploadedJobs(ctx *gin.Context) {
 // @Param UserId query string true "将要列出收藏工作的用户UserId"
 // @Router /api/ListCollectedJobs [GET]
 // @Produce json
-// @Success 200 {object} string
-// @Failure 400 {object} string
+// @Success 200 {object} def.ResponseForm
+// @Failure 400 {object} def.ResponseForm
 func ListCollectedJobs(ctx *gin.Context) {
 
 }
@@ -219,8 +229,8 @@ func ListCollectedJobs(ctx *gin.Context) {
 // @Param UserId query string true "将要列出最近浏览的用户UserId"
 // @Router /api/ListViewedJobs [GET]
 // @Produce json
-// @Success 200 {object} ResponseForm
-// @Failure 400 {object} string
+// @Success 200 {object} def.ResponseForm
+// @Failure 400 {object} def.ResponseForm
 func ListViewedJobs(ctx *gin.Context) {
 	var r def.ListViewedJobsRequest
 	if err := ctx.ShouldBindJSON(&r); err != nil {
@@ -244,8 +254,8 @@ func ListViewedJobs(ctx *gin.Context) {
 // @Param password query string true "用户密码"
 // @Router /Login [GET]
 // @Produce json
-// @Success 200 {object} ResponseForm
-// @Failure 400 {object} string
+// @Success 200 {object} def.ResponseForm
+// @Failure 400 {object} def.ResponseForm
 func Login(ctx *gin.Context) {
 	var r def.UserRequest
 	if err := ctx.ShouldBindJSON(&r); err != nil {
