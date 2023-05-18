@@ -203,7 +203,23 @@ func BatchPullOffJobs(ctx *gin.Context) {
 // @Success 200 {object} string
 // @Failure 400 {object} string
 func ListUploadedJobs(ctx *gin.Context) {
-
+	var r def.ListUploadedJobsRequest
+	if err := ctx.ShouldBindJSON(&r); err != nil {
+		log.Println("list viewed job error Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		})
+	}
+	jobIds, err := Service.ListUploadedJobs(r.UserId)
+	if err != nil {
+		log.Println("login viewed job Error in API layer :" + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		})
+	}
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobIds})
 }
 
 // ListCollectedJobs
@@ -217,7 +233,23 @@ func ListUploadedJobs(ctx *gin.Context) {
 // @Success 200 {object} def.ResponseForm
 // @Failure 400 {object} def.ResponseForm
 func ListCollectedJobs(ctx *gin.Context) {
-
+	var r def.ListCollectedJobsRequest
+	if err := ctx.ShouldBindJSON(&r); err != nil {
+		log.Println("list viewed job error Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		})
+	}
+	jobIds, err := Service.ListCollectedJobs(r.UserId)
+	if err != nil {
+		log.Println("login viewed job Error in API layer :" + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		})
+	}
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobIds})
 }
 
 // ListViewedJobs
@@ -233,16 +265,21 @@ func ListCollectedJobs(ctx *gin.Context) {
 func ListViewedJobs(ctx *gin.Context) {
 	var r def.ListViewedJobsRequest
 	if err := ctx.ShouldBindJSON(&r); err != nil {
-		log.Println("list viewed job info error msg is " + err.Error())
-		return
+		log.Println("list viewed job Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		})
 	}
 	jobIds, err := Service.ListViewedJobs(r.UserId)
 	if err != nil {
-		log.Println("login viewed job info error msg is " + err.Error())
-		return
+		log.Println("login viewed job Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		})
 	}
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "login success", Data: jobIds})
-
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobIds})
 }
 
 // Login
@@ -257,14 +294,22 @@ func ListViewedJobs(ctx *gin.Context) {
 // @Failure 400 {object} def.ResponseForm
 func Login(ctx *gin.Context) {
 	var r def.UserRequest
-	if err := ctx.ShouldBindJSON(&r); err != nil {
-		log.Println("login info error msg is " + err.Error())
+	if err := ctx.ShouldBind(&r); err != nil {
+		log.Println("login Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		})
 		return
 	}
 	token, err := Service.Login(r.Name, r.PassWord)
 	if err != nil {
-		log.Println("login info err msg is " + err.Error())
+		log.Println("login Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		})
 		return
 	}
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "login success", Data: token.(string)})
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: token.(string)})
 }

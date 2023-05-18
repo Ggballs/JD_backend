@@ -1,6 +1,7 @@
-package DAO
+package Service
 
 import (
+	"JD_backend/DAO"
 	"JD_backend/DAO/mdDef"
 	"encoding/json"
 	"log"
@@ -8,7 +9,7 @@ import (
 )
 
 func TestCreateUser(t *testing.T) {
-	DBinit()
+	DAO.DBinit()
 	viewedJobs := []mdDef.ViewedJob{
 		{
 			"1",
@@ -54,7 +55,7 @@ func TestCreateUser(t *testing.T) {
 			return
 		}
 	}
-	err = MysqlDB.Create(&users).Error
+	err = DAO.MysqlDB.Create(&users).Error
 	if err != nil {
 		log.Println("add to database error " + err.Error())
 		return

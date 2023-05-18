@@ -15,3 +15,11 @@ type BatchPullOffJobsRequest struct {
 type ListViewedJobsRequest struct {
 	UserId string `json:"user_id"`
 }
+
+type ListCollectedJobsRequest struct {
+	UserId string `json:"user_id"`
+}
+
+type ListUploadedJobsRequest struct {
+	UserId string `json:"user_id"`
+}
