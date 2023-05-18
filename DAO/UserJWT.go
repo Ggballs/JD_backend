@@ -8,6 +8,7 @@ import (
 	"crypto/rand"
 	"github.com/gbrlsnchs/jwt/v3"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm/clause"
 	"log"
 	"time"
 )
@@ -62,15 +63,16 @@ func Login(name string, password string) (interface{}, error) {
 	}
 
 	token, err := Sign(user.UserId, user.Name)
-
 	if err != nil {
 		log.Println("get token error " + err.Error())
 	}
 
-	userId2Token := &mdDef.TokenBasic{}
-	userId2Token.UserId = user.UserId
-	userId2Token.Token = token
-	MysqlDB.Save(&userId2Token)
+	userId2token := mdDef.TokenBasic{}
+	userId2token.UserId = user.UserId
+	userId2token.Token = token
+	MysqlDB.Clauses(clause.OnConflict{
+		DoUpdates: clause.AssignmentColumns([]string{"token"}),
+	}).Create(&userId2token)
 
 	return token, err
 }

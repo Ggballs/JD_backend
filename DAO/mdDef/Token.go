@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type TokenBasic struct {
 	gorm.Model
-	UserId string `json:"user_id" gorm:"not null; column:user_id"`
+	UserId string `json:"user_id" gorm:"not null; unique; column:user_id"`
 	Token  string `json:"token" gorm:"not null; index; column:token"`
 }
 

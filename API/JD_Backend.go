@@ -197,7 +197,7 @@ func BatchPullOffJobs(ctx *gin.Context) {
 // @Summary 列出用户已上传的工作
 // @Description 列出用户已上传的工作
 // @Param Authorization header string true "Bearer 用户令牌"
-// @Param UserId query string true "将要列出工作的用户UserId"
+// @Param request body def.ListUploadedJobsRequest true "请求"
 // @Router /api/ListUploadedJobs [GET]
 // @Produce json
 // @Success 200 {object} string
@@ -227,7 +227,7 @@ func ListUploadedJobs(ctx *gin.Context) {
 // @Summary 列出用户收藏的工作
 // @Description 列出用户收藏的工作
 // @Param Authorization header string true "Bearer 用户令牌"
-// @Param UserId query string true "将要列出收藏工作的用户UserId"
+// @Param request body def.ListCollectedJobsRequest true "请求"
 // @Router /api/ListCollectedJobs [GET]
 // @Produce json
 // @Success 200 {object} def.ResponseForm
@@ -257,7 +257,7 @@ func ListCollectedJobs(ctx *gin.Context) {
 // @Summary 列出最近浏览的工作
 // @Description 列出最近浏览的工作
 // @Param Authorization header string true "Bearer 用户令牌"
-// @Param UserId query string true "将要列出最近浏览的用户UserId"
+// @Param request body def.ListViewedJobsRequest true "请求"
 // @Router /api/ListViewedJobs [GET]
 // @Produce json
 // @Success 200 {object} def.ResponseForm
@@ -286,15 +286,14 @@ func ListViewedJobs(ctx *gin.Context) {
 // @tags 用户管理
 // @Summary 用户登录验证
 // @Description 用户登录使用JWT验证
-// @Param name query string true "用户ID"
-// @Param password query string true "用户密码"
+// @Param request body def.UserRequest true "请求"
 // @Router /Login [GET]
 // @Produce json
 // @Success 200 {object} def.ResponseForm
 // @Failure 400 {object} def.ResponseForm
 func Login(ctx *gin.Context) {
 	var r def.UserRequest
-	if err := ctx.ShouldBind(&r); err != nil {
+	if err := ctx.ShouldBindJSON(&r); err != nil {
 		log.Println("login Error in API layer : " + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
 			Code: http.StatusBadRequest,
