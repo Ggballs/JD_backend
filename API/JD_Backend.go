@@ -200,8 +200,8 @@ func BatchPullOffJobs(ctx *gin.Context) {
 // @Param request body def.ListUploadedJobsRequest true "请求"
 // @Router /api/ListUploadedJobs [GET]
 // @Produce json
-// @Success 200 {object} string
-// @Failure 400 {object} string
+// @Success 200 {object} def.ResponseForm{data=mdDef.JobDescription} “工作详情”
+// @Failure 400 {object} def.ResponseForm
 func ListUploadedJobs(ctx *gin.Context) {
 	var r def.ListUploadedJobsRequest
 	if err := ctx.ShouldBindJSON(&r); err != nil {
@@ -211,7 +211,7 @@ func ListUploadedJobs(ctx *gin.Context) {
 			Msg:  err.Error(),
 		})
 	}
-	jobIds, err := Service.ListUploadedJobs(r.UserId)
+	jobs, err := Service.ListUploadedJobs(r.UserId)
 	if err != nil {
 		log.Println("login viewed job Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
@@ -219,7 +219,7 @@ func ListUploadedJobs(ctx *gin.Context) {
 			Msg:  err.Error(),
 		})
 	}
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobIds})
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobs})
 }
 
 // ListCollectedJobs
@@ -230,7 +230,7 @@ func ListUploadedJobs(ctx *gin.Context) {
 // @Param request body def.ListCollectedJobsRequest true "请求"
 // @Router /api/ListCollectedJobs [GET]
 // @Produce json
-// @Success 200 {object} def.ResponseForm
+// @Success 200 {object} def.ResponseForm{data=mdDef.JobDescription} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListCollectedJobs(ctx *gin.Context) {
 	var r def.ListCollectedJobsRequest
@@ -241,7 +241,7 @@ func ListCollectedJobs(ctx *gin.Context) {
 			Msg:  err.Error(),
 		})
 	}
-	jobIds, err := Service.ListCollectedJobs(r.UserId)
+	jobs, err := Service.ListCollectedJobs(r.UserId)
 	if err != nil {
 		log.Println("login viewed job Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
@@ -249,7 +249,7 @@ func ListCollectedJobs(ctx *gin.Context) {
 			Msg:  err.Error(),
 		})
 	}
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobIds})
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobs})
 }
 
 // ListViewedJobs
@@ -260,7 +260,7 @@ func ListCollectedJobs(ctx *gin.Context) {
 // @Param request body def.ListViewedJobsRequest true "请求"
 // @Router /api/ListViewedJobs [GET]
 // @Produce json
-// @Success 200 {object} def.ResponseForm
+// @Success 200 {object} def.ResponseForm{data=mdDef.JobDescription} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListViewedJobs(ctx *gin.Context) {
 	var r def.ListViewedJobsRequest
@@ -271,7 +271,7 @@ func ListViewedJobs(ctx *gin.Context) {
 			Msg:  err.Error(),
 		})
 	}
-	jobIds, err := Service.ListViewedJobs(r.UserId)
+	jobs, err := Service.ListViewedJobs(r.UserId)
 	if err != nil {
 		log.Println("login viewed job Error in API layer : " + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
@@ -279,7 +279,7 @@ func ListViewedJobs(ctx *gin.Context) {
 			Msg:  err.Error(),
 		})
 	}
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobIds})
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobs})
 }
 
 // Login
@@ -289,7 +289,7 @@ func ListViewedJobs(ctx *gin.Context) {
 // @Param request body def.UserRequest true "请求"
 // @Router /Login [GET]
 // @Produce json
-// @Success 200 {object} def.ResponseForm
+// @Success 200 {object} def.ResponseForm{data=mdDef.TokenBasic} "token"
 // @Failure 400 {object} def.ResponseForm
 func Login(ctx *gin.Context) {
 	var r def.UserRequest
