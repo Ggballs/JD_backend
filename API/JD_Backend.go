@@ -260,7 +260,7 @@ func ListCollectedJobs(ctx *gin.Context) {
 // @Param request body def.ListViewedJobsRequest true "请求"
 // @Router /api/ListViewedJobs [GET]
 // @Produce json
-// @Success 200 {object} def.ResponseForm
+// @Success 200 {object} def.ResponseForm{data=
 // @Failure 400 {object} def.ResponseForm
 func ListViewedJobs(ctx *gin.Context) {
 	var r def.ListViewedJobsRequest
