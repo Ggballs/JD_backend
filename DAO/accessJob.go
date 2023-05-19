@@ -197,42 +197,64 @@ func ListUploadedJobIds(userId string) ([]string, error) {
 	return jobIds, nil
 }
 
-func ListViewedJobIds(userId string) ([]string, error) {
+func ListUploadedJobs(userId string) ([]mdDef.JobDescription, error) {
+	var jobs []mdDef.JobDescription
+	err := MysqlDB.Where("upload_user_id = ?", userId).Find(&jobs).Error
+	if err != nil {
+		log.Println("ListUploadedJobs error in DAO Layer: " + err.Error())
+		return nil, err
+	}
+	return jobs, nil
+}
+func ListViewedJobs(userId string) ([]mdDef.JobDescription, error) {
 	var user *mdDef.UserBasic
 	err := MysqlDB.Where("user_id = ?", userId).Find(&user).Error
 	if err != nil {
 		log.Println("ListViewEdJObs error in DAO layer: " + err.Error())
 		return nil, err
 	}
-	var jobIds []string
 	var viewJobIds []*mdDef.ViewedJob
 	err = json.Unmarshal(user.ViewedJobs, &viewJobIds)
 	if err != nil {
-		log.Println("json unmarshal error: " + err.Error())
+		log.Println("json unmarshal error in DAO layer: " + err.Error())
 		return nil, err
 	}
-	for _, job := range viewJobIds {
-		jobIds = append(jobIds, job.JobId)
+	var jobs []mdDef.JobDescription
+	job := &mdDef.JobDescription{}
+	for _, jobId := range viewJobIds {
+		err := MysqlDB.Where("job_id = ?", jobId).Find(job).Error
+		if err != nil {
+			log.Println("find job error based on job_id in DAO layer: " + err.Error())
+			return nil, err
+		}
+		jobs = append(jobs, *job)
 	}
-	return jobIds, nil
+	return jobs, nil
 }
 
-func ListCollectedJobIds(userId string) ([]string, error) {
+func ListCollectedJobs(userId string) ([]mdDef.JobDescription, error) {
 	var user *mdDef.UserBasic
 	err := MysqlDB.Where("user_id = ?", userId).Find(&user).Error
 	if err != nil {
 		log.Println("ListCollectedJObs error in DAO layer: " + err.Error())
 		return nil, err
 	}
-	var jobIds []string
+
 	var collectedJobs []*mdDef.ViewedJob
 	err = json.Unmarshal(user.CollectedJobs, &collectedJobs)
 	if err != nil {
 		log.Println("json unmarshal error: " + err.Error())
 		return nil, err
 	}
-	for _, job := range collectedJobs {
-		jobIds = append(jobIds, job.JobId)
+	var jobs []mdDef.JobDescription
+	job := &mdDef.JobDescription{}
+	for _, jobId := range collectedJobs {
+		err := MysqlDB.Where("job_id = ?", jobId).Find(job).Error
+		if err != nil {
+			log.Println("find job error based on job_id in DAO layer: " + err.Error())
+			return nil, err
+		}
+		jobs = append(jobs, *job)
 	}
-	return jobIds, nil
+	return jobs, nil
 }

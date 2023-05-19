@@ -2,6 +2,7 @@ package Service
 
 import (
 	"JD_backend/DAO"
+	"JD_backend/DAO/mdDef"
 	"log"
 )
 
@@ -41,29 +42,29 @@ func BatchPullOffJobs(userId string, jobIds []string) error {
 	return nil
 }
 
-func ListViewedJobs(userId string) ([]string, error) {
-	JobIds, err := DAO.ListViewedJobIds(userId)
+func ListViewedJobs(userId string) ([]mdDef.JobDescription, error) {
+	Jobs, err := DAO.ListViewedJobs(userId)
 	if err != nil {
 		log.Println("ListViewJobs error : " + err.Error())
 		return nil, err
 	}
-	return JobIds, nil
+	return Jobs, nil
 }
 
-func ListUploadedJobs(userId string) ([]string, error) {
-	jobIds, err := DAO.ListUploadedJobIds(userId)
+func ListUploadedJobs(userId string) ([]mdDef.JobDescription, error) {
+	jobs, err := DAO.ListUploadedJobs(userId)
 	if err != nil {
 		log.Println("ListUploadedJobs error ：" + err.Error())
 		return nil, err
 	}
-	return jobIds, nil
+	return jobs, nil
 }
 
-func ListCollectedJobs(userId string) ([]string, error) {
-	jobIds, err := DAO.ListCollectedJobIds(userId)
+func ListCollectedJobs(userId string) ([]mdDef.JobDescription, error) {
+	jobs, err := DAO.ListCollectedJobs(userId)
 	if err != nil {
 		log.Println("ListUploadedJobs error ：" + err.Error())
 		return nil, err
 	}
-	return jobIds, nil
+	return jobs, nil
 }
