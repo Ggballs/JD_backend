@@ -13,7 +13,7 @@ func AuthJWT() gin.HandlerFunc {
 		header := ctx.GetHeader("Authorization")
 		headerList := strings.Split(header, " ")
 		if len(headerList) != 2 {
-			err := errors.New("unable to parse Auto")
+			err := errors.New("unable  to parse Auto")
 			log.Println("header error " + err.Error())
 			ctx.Abort()
 			return
