@@ -216,7 +216,7 @@ func BatchPullOffJobs(ctx *gin.Context) {
 // @Param Authorization header string true "Bearer 用户令牌"
 // @Router /api/List-uploads [GET]
 // @Produce json
-// @Success 200 {object} def.ResponseForm{data=mdDef.JobDescription} “工作详情”
+// @Success 200 {object} def.ResponseForm{data=[]mdDef.JobDescription} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListUploadedJobs(ctx *gin.Context) {
 	token, ok := ctx.Get("AutoToken")
@@ -243,7 +243,7 @@ func ListUploadedJobs(ctx *gin.Context) {
 // @Param Authorization header string true "Bearer 用户令牌"
 // @Router /api/jobs/list-collections [GET]
 // @Produce json
-// @Success 200 {object} def.ResponseForm{data=mdDef.JobDescription} “工作详情”
+// @Success 200 {object} def.ResponseForm{data=[]mdDef.JobDescription} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListCollectedJobs(ctx *gin.Context) {
 	token, ok := ctx.Get("AutoToken")
@@ -270,7 +270,7 @@ func ListCollectedJobs(ctx *gin.Context) {
 // @Param Authorization header string true "Bearer 用户令牌"
 // @Router /api/jobs/list-views [GET]
 // @Produce json
-// @Success 200 {object} def.ResponseForm{data=mdDef.JobDescription} “工作详情”
+// @Success 200 {object} def.ResponseForm{data=[]mdDef.JobDescription} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListViewedJobs(ctx *gin.Context) {
 	token, ok := ctx.Get("AutoToken")
