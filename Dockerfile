@@ -1,17 +1,18 @@
 FROM golang:1.18 as builder
 
-RUN mkdir /app
-
-ADD . /app/
-
 WORKDIR /app
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+COPY go.mod go.sum ./
 
-FROM alpine:latest
+RUN go mod download
 
-WORKDIR /app
+COPY *.go ./
 
-COPY --from=builder /app/main .
 
-CMD ["/app/main"]
+RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
+
+
+EXPOSE 8080
+
+# Run
+CMD ["/docker-gs-ping"]
