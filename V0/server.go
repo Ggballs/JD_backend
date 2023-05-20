@@ -6,7 +6,7 @@ import (
 )
 
 func Register(BasicRouter *gin.Engine) {
-	BasicRouter.GET("login", API.Login)
+	BasicRouter.POST("login", API.Login)
 	apiGroup := BasicRouter.Group("api")
 	jobsGroup := apiGroup.Group("jobs")
 	jobsGroup.Use(AuthJWT())

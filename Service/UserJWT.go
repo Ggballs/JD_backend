@@ -5,7 +5,6 @@ import (
 	"JD_backend/DAO/mdDef"
 	"JD_backend/Service/msDef"
 	"log"
-	"strings"
 )
 
 func Login(name string, password string) (interface{}, error) {
@@ -26,10 +25,8 @@ func Verify(token []byte) (*msDef.LoginToken, error) {
 	return pl, nil
 }
 
-func GetUserInfoByHeader(header string) (*mdDef.UserBasic, error) {
-	headerList := strings.Split(header, " ")
-	token := headerList[1]
-	user, err := DAO.GetUserInfoByHeader(token)
+func GetUserInfoByToken(token string) (*mdDef.UserBasic, error) {
+	user, err := DAO.GetUserInfoByToken(token)
 	if err != nil {
 		log.Println("get userInfoByHeader error in Service layer " + err.Error())
 		return nil, err

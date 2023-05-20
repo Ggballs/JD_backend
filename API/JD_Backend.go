@@ -30,8 +30,13 @@ func BatchPolishJobs(ctx *gin.Context) {
 		return
 	}
 
-	header := ctx.GetHeader("Authorization")
-	userInfo, err := Service.GetUserInfoByHeader(header)
+	token, ok := ctx.Get("AutoToken")
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, def.ResponseForm{Code: http.StatusInternalServerError, Msg: "get token error"})
+		return
+	}
+	userInfo, err := Service.GetUserInfoByToken(token.(string))
+
 	if err != nil {
 		log.Println("BatchPolishJobs Error in API layer : " + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
@@ -75,8 +80,12 @@ func CollectJob(ctx *gin.Context) {
 		return
 	}
 
-	header := ctx.GetHeader("Authorization")
-	userInfo, err := Service.GetUserInfoByHeader(header)
+	token, ok := ctx.Get("AutoToken")
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, def.ResponseForm{Code: http.StatusInternalServerError, Msg: "get token error"})
+		return
+	}
+	userInfo, err := Service.GetUserInfoByToken(token.(string))
 	if err != nil {
 		log.Println("CollectJob Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
@@ -121,8 +130,12 @@ func DeCollectJob(ctx *gin.Context) {
 		})
 		return
 	}
-	header := ctx.GetHeader("Authorization")
-	userInfo, err := Service.GetUserInfoByHeader(header)
+	token, ok := ctx.Get("AutoToken")
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, def.ResponseForm{Code: http.StatusInternalServerError, Msg: "get token error"})
+		return
+	}
+	userInfo, err := Service.GetUserInfoByToken(token.(string))
 	if err != nil {
 		log.Println("DeCollectJob Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
@@ -167,8 +180,12 @@ func BatchPullOffJobs(ctx *gin.Context) {
 		return
 	}
 
-	header := ctx.GetHeader("Authorization")
-	userInfo, err := Service.GetUserInfoByHeader(header)
+	token, ok := ctx.Get("AutoToken")
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, def.ResponseForm{Code: http.StatusInternalServerError, Msg: "get token error"})
+		return
+	}
+	userInfo, err := Service.GetUserInfoByToken(token.(string))
 	if err != nil {
 		log.Println("BatchPullOffJobs Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
@@ -197,21 +214,18 @@ func BatchPullOffJobs(ctx *gin.Context) {
 // @Summary 列出用户已上传的工作
 // @Description 列出用户已上传的工作
 // @Param Authorization header string true "Bearer 用户令牌"
-// @Param request body def.ListUploadedJobsRequest true "请求"
-// @Router /api/ListUploadedJobs [GET]
+// @Router /api/List-uploads [GET]
 // @Produce json
 // @Success 200 {object} def.ResponseForm{data=mdDef.JobDescription} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListUploadedJobs(ctx *gin.Context) {
-	var r def.ListUploadedJobsRequest
-	if err := ctx.ShouldBindJSON(&r); err != nil {
-		log.Println("list viewed job error Error in API layer : " + err.Error())
-		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: http.StatusBadRequest,
-			Msg:  err.Error(),
-		})
+	token, ok := ctx.Get("AutoToken")
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, def.ResponseForm{Code: http.StatusInternalServerError, Msg: "get token error"})
+		return
 	}
-	jobs, err := Service.ListUploadedJobs(r.UserId)
+	userInfo, err := Service.GetUserInfoByToken(token.(string))
+	jobs, err := Service.ListUploadedJobs(userInfo.UserId)
 	if err != nil {
 		log.Println("login viewed job Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
@@ -227,21 +241,18 @@ func ListUploadedJobs(ctx *gin.Context) {
 // @Summary 列出用户收藏的工作
 // @Description 列出用户收藏的工作
 // @Param Authorization header string true "Bearer 用户令牌"
-// @Param request body def.ListCollectedJobsRequest true "请求"
-// @Router /api/ListCollectedJobs [GET]
+// @Router /api/jobs/list-collections [GET]
 // @Produce json
 // @Success 200 {object} def.ResponseForm{data=mdDef.JobDescription} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListCollectedJobs(ctx *gin.Context) {
-	var r def.ListCollectedJobsRequest
-	if err := ctx.ShouldBindJSON(&r); err != nil {
-		log.Println("list viewed job error Error in API layer : " + err.Error())
-		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: http.StatusBadRequest,
-			Msg:  err.Error(),
-		})
+	token, ok := ctx.Get("AutoToken")
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, def.ResponseForm{Code: http.StatusInternalServerError, Msg: "get token error"})
+		return
 	}
-	jobs, err := Service.ListCollectedJobs(r.UserId)
+	userInfo, err := Service.GetUserInfoByToken(token.(string))
+	jobs, err := Service.ListCollectedJobs(userInfo.UserId)
 	if err != nil {
 		log.Println("login viewed job Error in API layer :" + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
@@ -257,21 +268,18 @@ func ListCollectedJobs(ctx *gin.Context) {
 // @Summary 列出最近浏览的工作
 // @Description 列出最近浏览的工作
 // @Param Authorization header string true "Bearer 用户令牌"
-// @Param request body def.ListViewedJobsRequest true "请求"
-// @Router /api/ListViewedJobs [GET]
+// @Router /api/jobs/list-views [GET]
 // @Produce json
 // @Success 200 {object} def.ResponseForm{data=mdDef.JobDescription} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListViewedJobs(ctx *gin.Context) {
-	var r def.ListViewedJobsRequest
-	if err := ctx.ShouldBindJSON(&r); err != nil {
-		log.Println("list viewed job Error in API layer : " + err.Error())
-		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
-			Code: http.StatusBadRequest,
-			Msg:  err.Error(),
-		})
+	token, ok := ctx.Get("AutoToken")
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, def.ResponseForm{Code: http.StatusInternalServerError, Msg: "get token error"})
+		return
 	}
-	jobs, err := Service.ListViewedJobs(r.UserId)
+	userInfo, err := Service.GetUserInfoByToken(token.(string))
+	jobs, err := Service.ListViewedJobs(userInfo.UserId)
 	if err != nil {
 		log.Println("login viewed job Error in API layer : " + err.Error())
 		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
@@ -287,9 +295,9 @@ func ListViewedJobs(ctx *gin.Context) {
 // @Summary 用户登录验证
 // @Description 用户登录使用JWT验证
 // @Param request body def.UserRequest true "请求"
-// @Router /Login [GET]
+// @Router /Login [POST]
 // @Produce json
-// @Success 200 {object} def.ResponseForm{data=mdDef.TokenBasic} "token"
+// @Success 200 {object} def.ResponseForm{data=msDef.Token} "token"
 // @Failure 400 {object} def.ResponseForm
 func Login(ctx *gin.Context) {
 	var r def.UserRequest

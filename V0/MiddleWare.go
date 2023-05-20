@@ -1,10 +1,12 @@
 package V0
 
 import (
+	"JD_backend/API/def"
 	"JD_backend/Service"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"strings"
 )
 
@@ -15,7 +17,7 @@ func AuthJWT() gin.HandlerFunc {
 		if len(headerList) != 2 {
 			err := errors.New("unable to parse Auto")
 			log.Println("header error " + err.Error())
-			ctx.Abort()
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, def.ResponseForm{Code: http.StatusUnauthorized, Msg: "unable to parse auto"})
 			return
 		}
 		t := headerList[0]
@@ -23,16 +25,17 @@ func AuthJWT() gin.HandlerFunc {
 		if t != "Bearer" {
 			err := errors.New("error auto type")
 			log.Println("header error " + err.Error())
-			ctx.Abort()
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, def.ResponseForm{Code: http.StatusUnauthorized, Msg: "error auto type"})
 			return
 		}
 
 		if _, err := Service.Verify([]byte(content)); err != nil {
 			err := errors.New("error token")
 			log.Println("header error " + err.Error())
-			ctx.Abort()
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, def.ResponseForm{Code: http.StatusUnauthorized, Msg: "error token"})
 			return
 		}
+		ctx.Set("AutoToken", content)
 		ctx.Next()
 	}
 }

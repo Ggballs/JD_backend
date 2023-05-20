@@ -77,7 +77,7 @@ func Login(name string, password string) (interface{}, error) {
 	return token, err
 }
 
-func GetUserInfoByHeader(token string) (*mdDef.UserBasic, error) {
+func GetUserInfoByToken(token string) (*mdDef.UserBasic, error) {
 	var token2user *mdDef.TokenBasic
 	err := MysqlDB.Where("token = ?", token).First(&token2user).Error
 	if err != nil {
