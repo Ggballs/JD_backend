@@ -213,16 +213,16 @@ func ListViewedJobs(userId string) ([]mdDef.JobDescription, error) {
 		log.Println("ListViewEdJObs error in DAO layer: " + err.Error())
 		return nil, err
 	}
-	var viewJobIds []*mdDef.ViewedJob
-	err = json.Unmarshal(user.ViewedJobs, &viewJobIds)
+	var viewedJobs []*mdDef.ViewedJob
+	err = json.Unmarshal(user.ViewedJobs, &viewedJobs)
 	if err != nil {
 		log.Println("json unmarshal error in DAO layer: " + err.Error())
 		return nil, err
 	}
 	var jobs []mdDef.JobDescription
 	job := &mdDef.JobDescription{}
-	for _, jobId := range viewJobIds {
-		err := MysqlDB.Where("job_id = ?", jobId).Find(job).Error
+	for _, viewedJob := range viewedJobs {
+		err := MysqlDB.Where("job_id = ?", viewedJob.JobId).Find(job).Error
 		if err != nil {
 			log.Println("find job error based on job_id in DAO layer: " + err.Error())
 			return nil, err
@@ -240,7 +240,7 @@ func ListCollectedJobs(userId string) ([]mdDef.JobDescription, error) {
 		return nil, err
 	}
 
-	var collectedJobs []*mdDef.ViewedJob
+	var collectedJobs []*mdDef.CollectedJob
 	err = json.Unmarshal(user.CollectedJobs, &collectedJobs)
 	if err != nil {
 		log.Println("json unmarshal error: " + err.Error())
@@ -248,8 +248,8 @@ func ListCollectedJobs(userId string) ([]mdDef.JobDescription, error) {
 	}
 	var jobs []mdDef.JobDescription
 	job := &mdDef.JobDescription{}
-	for _, jobId := range collectedJobs {
-		err := MysqlDB.Where("job_id = ?", jobId).Find(job).Error
+	for _, collectedJob := range collectedJobs {
+		err := MysqlDB.Where("job_id = ?", collectedJob.JobId).Find(job).Error
 		if err != nil {
 			log.Println("find job error based on job_id in DAO layer: " + err.Error())
 			return nil, err
