@@ -9,7 +9,7 @@ func Register(BasicRouter *gin.Engine) {
 	BasicRouter.POST("login", API.Login)
 	apiGroup := BasicRouter.Group("api")
 	jobsGroup := apiGroup.Group("jobs")
-	jobsGroup.Use(AuthJWT())
+	//jobsGroup.Use(AuthJWT())
 	{
 		jobsGroup.POST("/polish", API.BatchPolishJobs)
 		jobsGroup.POST("/collect", API.CollectJob)
