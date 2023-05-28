@@ -7,7 +7,11 @@
     <list default="true" id="ca16f332-0296-45ee-b059-6d9b474ac36f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/V0/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/V0/server.go" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/Service/accessJob_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/Service/accessJob_test.go" afterDir="false" />
+>>>>>>> 4d3ede949fd789648f1ae997c6fbec56a505b233
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,9 +65,6 @@
         </option>
       </RecentBranches>
     </option>
-  </component>
-  <component name="GoLibraries">
-    <option name="indexEntireGoPath" value="false" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
