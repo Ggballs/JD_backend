@@ -9,6 +9,7 @@ import (
 )
 
 func initJD() {
+
 	jobInfo := mdDef.JobDescription{
 		JobId:        "testId",
 		JobName:      "testName",
