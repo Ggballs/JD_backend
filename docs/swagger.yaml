@@ -1,0 +1,329 @@
+definitions:
+  def.BatchPolishJobsRequest:
+    properties:
+      jobIds:
+        items:
+          type: string
+        type: array
+    type: object
+  def.BatchPullOffJobsRequest:
+    properties:
+      jobIds:
+        items:
+          type: string
+        type: array
+    type: object
+  def.CollectJobRequest:
+    properties:
+      jobId:
+        type: string
+    type: object
+  def.ListJobResponse:
+    properties:
+      jobs:
+        items:
+          $ref: '#/definitions/mdDef.JobDescription'
+        type: array
+      length:
+        type: integer
+    type: object
+  def.ResponseForm:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+  def.UserRequest:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  mdDef.JobDescription:
+    properties:
+      base_position:
+        type: string
+      collected_times:
+        type: integer
+      company_name:
+        type: string
+      createdAt:
+        type: string
+      degree:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      industry:
+        type: string
+      intern_time_in_months:
+        type: integer
+      is_show:
+        type: boolean
+      job_id:
+        type: string
+      job_name:
+        type: string
+      job_type:
+        type: string
+      polished_time:
+        type: string
+      updatedAt:
+        type: string
+      upload_user_id:
+        type: string
+      work_day:
+        type: integer
+    type: object
+  msDef.Token:
+    properties:
+      token:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/jobs/collect:
+    post:
+      description: 对某一工作进入收藏夹
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/def.CollectJobRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+      summary: 收藏工作
+      tags:
+      - 工作管理
+  /api/jobs/de-collect:
+    post:
+      description: 对某一工作取消收藏
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/def.CollectJobRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+      summary: 取消收藏工作
+      tags:
+      - 工作管理
+  /api/jobs/list-collections:
+    get:
+      description: 列出用户收藏的工作
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/def.ResponseForm'
+            - properties:
+                data:
+                  $ref: '#/definitions/def.ListJobResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+      summary: 列出用户收藏的工作
+      tags:
+      - 工作管理
+  /api/jobs/list-uploads:
+    get:
+      description: 列出用户已上传的工作
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/def.ResponseForm'
+            - properties:
+                data:
+                  $ref: '#/definitions/def.ListJobResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+      summary: 列出用户已上传的工作
+      tags:
+      - 工作管理
+  /api/jobs/list-views:
+    get:
+      description: 列出最近浏览的工作
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/def.ResponseForm'
+            - properties:
+                data:
+                  $ref: '#/definitions/def.ListJobResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+      summary: 列出最近浏览的工作
+      tags:
+      - 工作管理
+  /api/jobs/polish:
+    post:
+      consumes:
+      - application/json
+      description: 对多个工作进行高亮标注
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/def.BatchPolishJobsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+      summary: 批量擦亮工作
+      tags:
+      - 工作管理
+  /api/jobs/pull-off:
+    post:
+      description: 将选中的工作进行下架
+      parameters:
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/def.BatchPullOffJobsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+      summary: 批量下架工作
+      tags:
+      - 工作管理
+  /login:
+    post:
+      description: 用户登录使用JWT验证
+      parameters:
+      - description: 请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/def.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            allOf:
+            - $ref: '#/definitions/def.ResponseForm'
+            - properties:
+                data:
+                  $ref: '#/definitions/msDef.Token'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/def.ResponseForm'
+      summary: 用户登录验证
+      tags:
+      - 用户管理
+swagger: "2.0"

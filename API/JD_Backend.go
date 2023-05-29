@@ -214,9 +214,9 @@ func BatchPullOffJobs(ctx *gin.Context) {
 // @Summary 列出用户已上传的工作
 // @Description 列出用户已上传的工作
 // @Param Authorization header string true "Bearer 用户令牌"
-// @Router /api/List-uploads [GET]
+// @Router /api/jobs/list-uploads [GET]
 // @Produce json
-// @Success 200 {object} def.ResponseForm{data=[]mdDef.JobDescription} “工作详情”
+// @Success 200 {object} def.ResponseForm{data=def.ListJobResponse} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListUploadedJobs(ctx *gin.Context) {
 	token, ok := ctx.Get("AutoToken")
@@ -233,7 +233,7 @@ func ListUploadedJobs(ctx *gin.Context) {
 			Msg:  err.Error(),
 		})
 	}
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobs})
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: def.ListJobResponse{Jobs: jobs, Length: len(jobs)}})
 }
 
 // ListCollectedJobs
@@ -243,7 +243,7 @@ func ListUploadedJobs(ctx *gin.Context) {
 // @Param Authorization header string true "Bearer 用户令牌"
 // @Router /api/jobs/list-collections [GET]
 // @Produce json
-// @Success 200 {object} def.ResponseForm{data=[]mdDef.JobDescription} “工作详情”
+// @Success 200 {object} def.ResponseForm{data=def.ListJobResponse} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListCollectedJobs(ctx *gin.Context) {
 	token, ok := ctx.Get("AutoToken")
@@ -260,7 +260,7 @@ func ListCollectedJobs(ctx *gin.Context) {
 			Msg:  err.Error(),
 		})
 	}
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobs})
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: def.ListJobResponse{Jobs: jobs, Length: len(jobs)}})
 }
 
 // ListViewedJobs
@@ -270,7 +270,7 @@ func ListCollectedJobs(ctx *gin.Context) {
 // @Param Authorization header string true "Bearer 用户令牌"
 // @Router /api/jobs/list-views [GET]
 // @Produce json
-// @Success 200 {object} def.ResponseForm{data=[]mdDef.JobDescription} “工作详情”
+// @Success 200 {object} def.ResponseForm{data=def.ListJobResponse} “工作详情”
 // @Failure 400 {object} def.ResponseForm
 func ListViewedJobs(ctx *gin.Context) {
 	token, ok := ctx.Get("AutoToken")
@@ -287,7 +287,7 @@ func ListViewedJobs(ctx *gin.Context) {
 			Msg:  err.Error(),
 		})
 	}
-	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: jobs})
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: def.ListJobResponse{Jobs: jobs, Length: len(jobs)}})
 }
 
 // Login
@@ -295,7 +295,7 @@ func ListViewedJobs(ctx *gin.Context) {
 // @Summary 用户登录验证
 // @Description 用户登录使用JWT验证
 // @Param request body def.UserRequest true "请求"
-// @Router /Login [POST]
+// @Router /login [POST]
 // @Produce json
 // @Success 200 {object} def.ResponseForm{data=msDef.Token} "token"
 // @Failure 400 {object} def.ResponseForm
