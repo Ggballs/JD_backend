@@ -320,3 +320,19 @@ func Login(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: token.(string)})
 }
+
+func WXLogin(ctx *gin.Context) {
+	code := ctx.Query("code") //  获取code
+	// 根据code获取 openID 和 session_key
+	token, err := Service.WXLogin(code)
+	if err != nil {
+		log.Println("login Error in API layer : " + err.Error())
+		ctx.JSON(http.StatusBadRequest, def.ResponseForm{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: token.(string)})
+
+}

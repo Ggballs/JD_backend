@@ -17,7 +17,7 @@ var privateKey, _ = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 var publicKey = &privateKey.PublicKey
 var hs = jwt.NewES256(jwt.ECDSAPublicKey(publicKey), jwt.ECDSAPrivateKey(privateKey))
 
-func Sign(id string, username string) (string, error) {
+func Sign(id string, auxiliary string) (string, error) {
 	now := time.Now()
 	pl := msDef.LoginToken{
 		Payload: jwt.Payload{
@@ -29,8 +29,8 @@ func Sign(id string, username string) (string, error) {
 			IssuedAt:       jwt.NumericDate(now),
 			JWTID:          uuid.NewV4().String(),
 		},
-		ID:       id,
-		UserName: username,
+		ID:        id,
+		Auxiliary: auxiliary,
 	}
 	token, err := jwt.Sign(pl, hs)
 	return string(token), err
@@ -69,6 +69,22 @@ func Login(name string, password string) (interface{}, error) {
 
 	userId2token := mdDef.TokenBasic{}
 	userId2token.UserId = user.UserId
+	userId2token.Token = token
+	MysqlDB.Clauses(clause.OnConflict{
+		DoUpdates: clause.AssignmentColumns([]string{"token"}),
+	}).Create(&userId2token)
+
+	return token, err
+}
+
+func WXLogin(userId string, sessionKey string) (interface{}, error) {
+	token, err := Sign(userId, sessionKey)
+	if err != nil {
+		log.Println("get token error " + err.Error())
+	}
+
+	userId2token := mdDef.TokenBasic{}
+	userId2token.UserId = userId
 	userId2token.Token = token
 	MysqlDB.Clauses(clause.OnConflict{
 		DoUpdates: clause.AssignmentColumns([]string{"token"}),
