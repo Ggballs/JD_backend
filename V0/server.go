@@ -7,6 +7,8 @@ import (
 
 func Register(BasicRouter *gin.Engine) {
 	BasicRouter.POST("login", API.Login)
+	BasicRouter.POST("wx-login", API.WXLogin)
+
 	apiGroup := BasicRouter.Group("api")
 	jobsGroup := apiGroup.Group("jobs")
 	jobsGroup.Use(AuthJWT())

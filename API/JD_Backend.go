@@ -321,6 +321,15 @@ func Login(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, def.ResponseForm{Code: http.StatusOK, Msg: "success", Data: token.(string)})
 }
 
+// WXLogin
+// @tags 微信用户管理
+// @Summary 微信用户登录验证
+// @Description 微信用户登录使用JWT验证
+// @Param request query code true "微信小程序发送的识别信息"
+// @Router /wx-login [POST]
+// @Produce json
+// @Success 200 {object} def.ResponseForm{data=msDef.Token} "token"
+// @Failure 400 {object} def.ResponseForm
 func WXLogin(ctx *gin.Context) {
 	code := ctx.Query("code") //  获取code
 	// 根据code获取 openID 和 session_key
